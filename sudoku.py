@@ -71,7 +71,6 @@ class sudoku:
                 while p < i+3:
                     while q < j+3:
                         if not self.sudoku[p][q].list[l]:
-                            print contador,"Por lo que inserto en",p+1,q+1,":",l+1
                             self.inserta(p,q,l+1)
                         q+=1
                     q = j
@@ -109,9 +108,6 @@ class sudoku:
         self.marcar_cuadro_imposible(i,j)
         self.marcar_fila_imposible(i,j,self.sudoku[i][j].num)
         self.marcar_columna_imposible(i,j,self.sudoku[i][j].num)
-        for k in range(3):
-            for l in range(3):
-                self.comprueba_cuadro(3*k+1,3*l+1)
         for k in range(3):
             for l in range(3):
                 self.comprueba_cuadro(3*k+1,3*l+1)
