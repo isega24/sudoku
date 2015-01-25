@@ -217,12 +217,13 @@ class sudoku:
 
 
 sudok = sudoku()
-sudok.inicializa("sudoku.txt")
-
+sudok.inicializa(raw_input("Que sudoku quieres solucionar?:"))
+'''
 while True:
     sudok.imprime()
     cadena = raw_input("Datos:").split(" ",3)
     sudok.inserta(int(cadena[1])-1,int(cadena[0])-1,int(cadena[2]))
+'''
 
 sudok.imprime()
 
