@@ -27,10 +27,8 @@ class casilla:
         if self.num == 0 and num > 0 and num < 10 and not self.list[num-1]:
             self.num = num
             for i in range(9):
-                if not i == num-1:
-                    self.list[i] = True
+                self.list[i] = True
 
-            self.list[num-1] = False
             return True
         else:
             return False
@@ -51,22 +49,33 @@ class sudoku:
 
     #No lo tengo tan claro...
 
-    def comprueba_cuadro(self,i,j,num):
+    def comprueba_cuadro(self,i,j):
         i = i - i%3
         j = j - j%3
-        contador = 0
-        marca = [0,0]
-        for p in range(3):
-            for q in range(3):
-                if self.sudoku[i+p][j+q].list[num-1] or not self.sudoku[i+p][j+q].num == 0:
-                    contador+=1
-                else:
-                    marca[0] = i+p
-                    marca[1] = j+q
-        if contador == 8:
-            self.inserta(marca[0],marca[1],num)
+        contador = [0,0,0,0,0,0,0,0,0]
+        p = i
+        q = j
+        while p < i+3:
+            while q < j+3:
+                for l in range(9):
+                    if self.sudoku[p][q].list[l]:
+                        contador[l]+=1
+                q+=1
+            q = j
+            p+=1
 
-        self.solos_escondididos_cuadro(i,j)
+        p = i
+        q = j
+        for l in range(9):
+            if contador[l] == 8:
+                while p < i+3:
+                    while q < j+3:
+                        if not self.sudoku[p][q].list[l]:
+                            print contador,"Por lo que inserto en",p+1,q+1,":",l+1
+                            self.inserta(p,q,l+1)
+                        q+=1
+                    q = j
+                    p+=1
 
     #Funciona perfectamente:
 
@@ -97,13 +106,15 @@ class sudoku:
     #Funciona perfectamente:
 
     def rellena(self,i,j):
-        if self.rellenadas < 81:
-            self.marcar_cuadro_imposible(i,j)
-            self.marcar_fila_imposible(i,j,self.sudoku[i][j].num)
-            self.marcar_columna_imposible(i,j,self.sudoku[i][j].num)
-            for k in range(3):
-                for l in range(3):
-                    self.solos_escondididos_cuadro(3*k+1,3*l+1)
+        self.marcar_cuadro_imposible(i,j)
+        self.marcar_fila_imposible(i,j,self.sudoku[i][j].num)
+        self.marcar_columna_imposible(i,j,self.sudoku[i][j].num)
+        for k in range(3):
+            for l in range(3):
+                self.comprueba_cuadro(3*k+1,3*l+1)
+        for k in range(3):
+            for l in range(3):
+                self.comprueba_cuadro(3*k+1,3*l+1)
 
 
     #Funciona perfectamente:
@@ -125,9 +136,6 @@ class sudoku:
                     self.sudoku[k][j].marcar_imposible(num)
                     if not self.sudoku[k][j].num == 0:
                         self.rellena(k,j)
-                if k%3 == 2:
-                    self.comprueba_cuadro(k-k%3,j-j%3,self.sudoku[i][j].num)
-                    self.solos_escondididos_cuadro(k-k%3,j-j%3)
 
 
     #Funciona perfectamente.
@@ -144,9 +152,6 @@ class sudoku:
                     self.sudoku[i][k].marcar_imposible(num)
                     if not self.sudoku[i][k].num == 0:
                         self.rellena(i,k)
-                if k%3 == 2:
-                    self.comprueba_cuadro(k-k%3,j-j%3,self.sudoku[i][j].num)
-                    self.solos_escondididos_cuadro(k-k%3,j-j%3)
 
     #Funciona perfectamente.
 
@@ -176,40 +181,12 @@ class sudoku:
     '''
 
 
-    def solos_escondididos_cuadro(self,i,j):
-        lista = [0,0,0,0,0,0,0,0,0]
-        n = i - i%3
-        m = j - j%3
-        p = n
-        q = m
-        while p < n+3:
-            while q < m +3:
-                for k in range(9):
-                    if not self.sudoku[p][q].list[k]:
-                        lista[k]+=1
-
-
-                q+=1
-            q = m
-            p+=1
-
-        for k in range(9):
-            if lista[k]== 1:
-                while p < n+3:
-                    while q < m +3:
-                        if not self.sudoku[p][q].list[k]:
-                            self.inserta(p,q,k+1)
-
-
-                        q+=1
-                    q = m
-                    p+=1
-
-
 
 sudok = sudoku()
-sudok.inicializa("sudoku.txt")
- 
+sudok.inicializa("sudoku2.txt")
+
+
 sudok.imprime()
+
 
 
