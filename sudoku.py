@@ -108,10 +108,48 @@ class sudoku:
         self.marcar_cuadro_imposible(i,j)
         self.marcar_fila_imposible(i,j,self.sudoku[i][j].num)
         self.marcar_columna_imposible(i,j,self.sudoku[i][j].num)
-        for k in range(3):
-            for l in range(3):
-                self.comprueba_cuadro(3*k+1,3*l+1)
+        lista = [0,3,6]
+        for k in lista:
+            for l in lista:
+                self.comprueba_cuadro(k,l)
 
+        for k in range(9):
+            self.comprueba_fila(k)
+            self.comprueba_columna(k)
+
+    def comprueba_fila(self,fil):
+        lista1 = [False,False,False,False,False,False,False,False,False]
+        posicion = 0
+        contador = 0
+        for i in range(9):
+            if not self.sudoku[i][fil].num ==0:
+                contador+=1
+                lista1[self.sudoku[i][fil].num-1] = True
+            else:
+                posicion = i
+
+        if contador==8:
+            for j in range(9):
+                if not lista1[j]:
+                    self.inserta(posicion,fil,j+1)
+
+    
+    def comprueba_columna(self,col):
+        lista1 = [False,False,False,False,False,False,False,False,False]
+        posicion = 0
+        contador = 0
+        for i in range(9):
+            if not self.sudoku[col][i].num ==0:
+                contador+=1
+                lista1[self.sudoku[col][i].num-1] = True
+            else:
+                posicion = i
+
+        if contador==8:
+            for j in range(9):
+                if not lista1[j]:
+                    self.inserta(col,posicion,j+1)
+    
 
     #Funciona perfectamente:
 
@@ -179,8 +217,12 @@ class sudoku:
 
 
 sudok = sudoku()
-sudok.inicializa("sudoku2.txt")
+sudok.inicializa("sudoku.txt")
 
+while True:
+    sudok.imprime()
+    cadena = raw_input("Datos:").split(" ",3)
+    sudok.inserta(int(cadena[1])-1,int(cadena[0])-1,int(cadena[2]))
 
 sudok.imprime()
 
