@@ -1,4 +1,10 @@
 #!/usr/bin/python
+
+'''
+Este programa queda inacabado por que el lenguage python no hace copias por valor,
+sino por referencia de las listas, pero en este algoritmo necesito que se pase una copia,
+para que no modifique la copia inicial
+'''
 def imprime(sudoku):
     print "_ _ _ _ _ _ _ _ _ _ _ _ _"
     for i in range(9):
